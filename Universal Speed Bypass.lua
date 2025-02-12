@@ -15,5 +15,7 @@ character.Humanoid:Destroy()
 workspace.Camera.CameraSubject = newHumanoid
 
 newHumanoid:GetPropertyChangedSignal("Parent"):Connect(function()
+    
     workspace.Camera.CameraSubject = newHumanoid
+
 end)
