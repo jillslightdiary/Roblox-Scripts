@@ -1,7 +1,7 @@
--- Custom global environment
 local gameEnv = {}
+local functionList = {}
+local environments = {}
 
--- Custom getrawmetatable implementation
 gameEnv.getrawmetatable = function(object)
     local mt = debug.getmetatable(object) or getmetatable(object)
     if mt and type(mt) == "table" then
@@ -13,8 +13,7 @@ gameEnv.getrawmetatable = function(object)
     return mt
 end
 
--- Custom setfenv and getfenv implementations
-local environments = {} -- Store function environments
+table.insert(functionList, "getrawmetatable")
 
 gameEnv.getfenv = function(fn)
     if type(fn) ~= "function" then
@@ -22,6 +21,8 @@ gameEnv.getfenv = function(fn)
     end
     return environments[fn] or _G
 end
+
+table.insert(functionList, "getfenv")
 
 gameEnv.setfenv = function(fn, env)
     if type(fn) ~= "function" then
@@ -35,13 +36,14 @@ gameEnv.setfenv = function(fn, env)
     return fn
 end
 
--- Custom getgenv implementation
+table.insert(functionList, "setfenv")
+
 gameEnv.getgenv = function()
     return gameEnv
 end
 
--- Add standard Lua functions (so scripts can still use them)
-for k, v in pairs(_G) do
-    gameEnv[k] = v
-    print("Loaded enviroments: " .. v)
+table.insert(functionList, "getgenv")
+
+if #functionList > 0 then
+    print("Loaded functions: {\n  " .. table.concat(functionList, ",\n  ") .. "\n}")
 end
