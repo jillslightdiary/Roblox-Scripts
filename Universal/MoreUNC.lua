@@ -58,3 +58,4 @@ end
 
 -- Print loaded functions
 print("Loaded functions: {\n  " .. table.concat(functionList, ",\n  ") .. "\n}")
+ 
