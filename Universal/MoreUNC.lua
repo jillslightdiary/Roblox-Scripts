@@ -43,4 +43,5 @@ end
 -- Add standard Lua functions (so scripts can still use them)
 for k, v in pairs(_G) do
     gameEnv[k] = v
+    print("Loaded enviroments: " .. v)
 end
