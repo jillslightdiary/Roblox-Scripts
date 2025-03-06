@@ -23,5 +23,5 @@ end
 print("--- More Unc Loaded ---")
 
 return {
-    getrawmetatable = ___table.___getrawmetatable -- Fixed typo here
+    getrawmetatable = ___table.___getrawmetatable -- Fixed nil indexing issue
 }
