@@ -45,5 +45,8 @@ end
 table.insert(functionList, "getgenv")
 
 if #functionList > 0 then
-    print("Loaded functions: {\n  " .. table.concat(functionList, ",\n  ") .. "\n}")
+    for _, funcName in ipairs(functionList) do
+        _G[funcName] = gameEnv[funcName]
+        print("Loaded functions: {\n  " .. table.concat(functionList, ",\n  ") .. "\n}")
+    end
 end
