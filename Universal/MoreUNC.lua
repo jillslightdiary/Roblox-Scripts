@@ -1,27 +1,46 @@
-local ___table = {}
+-- Custom global environment
+local gameEnv = {}
 
-___table.___getrawmetatable = function(object)
-    local mt
-
-    if debug and debug.getmetatable then
-        mt = debug.getmetatable(object)
-    else
-        mt = getmetatable(object)
-    end
-
-    if mt and typeof(mt) == "table" then
+-- Custom getrawmetatable implementation
+gameEnv.getrawmetatable = function(object)
+    local mt = debug.getmetatable(object) or getmetatable(object)
+    if mt and type(mt) == "table" then
         local success, isReadOnly = pcall(setreadonly, mt, false)
-
         if success then
-            setreadonly(mt, isReadOnly) 
+            setreadonly(mt, isReadOnly)
         end
     end
-    
     return mt
 end
 
-print("--- More Unc Loaded ---")
+-- Custom setfenv and getfenv implementations
+local environments = {} -- Store function environments
 
-return {
-    getrawmetatable = ___table.___getrawmetatable -- Fixed nil indexing issue
-}
+gameEnv.getfenv = function(fn)
+    if type(fn) ~= "function" then
+        error("bad argument #1 to 'getfenv' (function expected)", 2)
+    end
+    return environments[fn] or _G
+end
+
+gameEnv.setfenv = function(fn, env)
+    if type(fn) ~= "function" then
+        error("bad argument #1 to 'setfenv' (function expected)", 2)
+    end
+    if type(env) ~= "table" then
+        error("bad argument #2 to 'setfenv' (table expected)", 2)
+    end
+
+    environments[fn] = env
+    return fn
+end
+
+-- Custom getgenv implementation
+gameEnv.getgenv = function()
+    return gameEnv
+end
+
+-- Add standard Lua functions (so scripts can still use them)
+for k, v in pairs(_G) do
+    gameEnv[k] = v
+end
