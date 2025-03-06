@@ -23,5 +23,5 @@ end
 print("--- More Unc Loaded ---")
 
 return {
-    getrawmetatable = __table.__getrawmetatable
+    getrawmetatable = ___table.___getrawmetatable -- Fixed typo here
 }
