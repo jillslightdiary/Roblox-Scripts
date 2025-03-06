@@ -20,4 +20,8 @@ ___table.___getrawmetatable = function(object)
     return mt
 end
 
-getrawmetatable = __table.__getrawmetatable
+print("--- More Unc Loaded ---")
+
+return {
+    getrawmetatable = __table.__getrawmetatable
+}
